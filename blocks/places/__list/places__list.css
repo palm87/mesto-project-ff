@@ -7,3 +7,11 @@
   margin: 0;
   padding: 0;
 }
+
+.places-zero {
+ color: #fff;
+}
+
+.hide-it {
+  display: none;
+}
