@@ -32,3 +32,56 @@
     width: 100%;
   }
 }
+
+
+.profile__reload-button {
+  width: 150px;
+  height: 50px;
+  background: transparent url("../../../images/reload-icon.svg") center no-repeat;
+  background-size: 30px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: 2px solid #fff;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.profile__reload-button:hover {
+  opacity: 0.6;
+}
+
+.profile__reload-button:disabled {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 740px) {
+  .profile__reload-button {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile__reload-button {
+    width: 100%;
+  }
+
+  .profile__buttons {
+    flex-direction: column;
+    width: 100%;
+  
+  }
+}
+
+.profile__buttons {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+
+}
