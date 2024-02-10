@@ -16,31 +16,48 @@ const reloadButton = document.querySelector('.profile__reload-button');
 let cardsCount=0;
 
 
-// @todo: Функция создания карточки
+//@todo: Функция создания карточки
 function createCard(card, anyFunction = deleteCard) {
     
     //клонируем содержимое template
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+    
+    //переменные для полей карточки
+    const cardTitle = cardElement.querySelector('.card__title');
+    const cardImage = cardElement.querySelector('.card__image');
+    
 
     // наполним содержимым
-    cardElement.querySelector('.card__image').src = card.link;
-    cardElement.querySelector('.card__image').alt = card.name;
-    cardElement.querySelector('.card__title').textContent = card.name;
-
+    cardTitle.textContent = card.name;
+    cardImage.src = card.link;
+    cardImage.alt = card.name;
+    
     //добавим eventListner на клик по кнопке удаления
     cardElement.querySelector('.card__delete-button').addEventListener('click', () => {
         deleteCard(cardElement);
     });
+
+    //вариант с передачей Event
+    // cardElement.querySelector('.card__delete-button').addEventListener('click', function (event){
+    //     deleteOnEvent(event);
+    // });
+
+    
     return cardElement;
 }
+
 // @todo: Функция удаления карточки
 function deleteCard(card) {
     card.remove();
-
     //понижаем счетчик карточек и проверяем, не пора ли отобразить надпись, что карточек нет
     cardsCount-=1;
     checkCardsCount();
 }
+
+//функция удаления в случае передаи Event
+// function deleteOnEvent(event) {
+//     event.target.closest('.card').remove();
+// }
 
 // @todo: Вывести карточки на страницу
 //функция добавления карточки в отображенный список на странице
@@ -53,6 +70,8 @@ const listCard = card => {
 initialCards.forEach((item) => {
     listCard(createCard(item));
 });
+
+//--------------------------EXTRA--------------------------------------------
 
 
 //функция для обновления списка карточек - удаляет все загруженные и заново подргужает список из initialCards
@@ -81,8 +100,9 @@ function checkCardsCount () {
         zeroPlaces.classList.add('hide-it');
     }
     checkReloadButton();
-    
 }
+
+//если на данный момент все карточки из initialCards отображены - дизейблим кнопку
 
 function checkReloadButton() {
     if (cardsCount===initialCards.length) {
