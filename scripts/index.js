@@ -1,3 +1,12 @@
+// У вас по заданию нет данной кнопки, она вам не нужна, сосредоточьтесь на том, что дается в задании. 
+// То, что сейчас мало нужно сделать - не означает, что в след работе будет меньше. 
+// А через спринт у вас будет работа с сервером, тут уже точно никаких перезагрузок не получится
+
+//Это очень плохой комментарий для ревьювера.
+
+//И почитайте про использование setAttrubute для disabled https://stackoverflow.com/questions/7526601/setattributedisabled-false-changes-editable-attribute-to-false
+
+
 // @todo: Темплейт карточки
 //получим template для создания карточки
 const cardTemplate = document.querySelector('#card-template').content;
@@ -17,7 +26,7 @@ let cardsCount=0;
 
 
 //@todo: Функция создания карточки
-function createCard(card, anyFunction = deleteCard) {
+function createCard(card, deleteCard) {
     
     //клонируем содержимое template
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
@@ -61,14 +70,14 @@ function deleteCard(card) {
 
 // @todo: Вывести карточки на страницу
 //функция добавления карточки в отображенный список на странице
-const listCard = card => {
+const renderCard = card => {
     cardsList.append(card);
     cardsCount+=1;
 }
 
 // наполним страницу имеющимся массивом карточек из card.js
 initialCards.forEach((item) => {
-    listCard(createCard(item));
+    renderCard(createCard(item, deleteCard));
 });
 
 //--------------------------EXTRA--------------------------------------------
@@ -76,13 +85,13 @@ initialCards.forEach((item) => {
 
 //функция для обновления списка карточек - удаляет все загруженные и заново подргужает список из initialCards
 function reloadCardList() {
-    const allCards=document.querySelectorAll('li')
+    const allCards=document.querySelectorAll('.card')
     allCards.forEach((item) =>{
         item.remove()
     })
     cardsCount=0;
     initialCards.forEach((item) => {
-        listCard(createCard(item));
+        renderCard(createCard(item, deleteCard));
     });
     checkCardsCount();
     checkReloadButton();
@@ -93,18 +102,17 @@ reloadButton.addEventListener('click', reloadCardList);
 
 //функция для проверки, сколько карточек отображается и не пора ли отобразить надпись, что карточек нет
 function checkCardsCount () {
-    if (cardsCount===0) {
-        zeroPlaces.classList.remove('hide-it');
-    }
-    else {
-        zeroPlaces.classList.add('hide-it');
-    }
+    zeroPlaces.classList.toggle('hide-it', cardsCount !== 0)
     checkReloadButton();
 }
 
 //если на данный момент все карточки из initialCards отображены - дизейблим кнопку
 
 function checkReloadButton() {
+    //ЭТО НЕ БУДЕТ РАБОТАТЬ https://stackoverflow.com/questions/7526601/setattributedisabled-false-changes-editable-attribute-to-false
+    //reloadButton.setAttribute('disabled', cardsCount===initialCards.length)
+    //ЭТО НЕ БУДЕТ РАБОТАТЬ https://stackoverflow.com/questions/7526601/setattributedisabled-false-changes-editable-attribute-to-false
+    
     if (cardsCount===initialCards.length) {
         reloadButton.setAttribute('disabled', true)
     }
