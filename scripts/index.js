@@ -1,12 +1,3 @@
-// У вас по заданию нет данной кнопки, она вам не нужна, сосредоточьтесь на том, что дается в задании. 
-// То, что сейчас мало нужно сделать - не означает, что в след работе будет меньше. 
-// А через спринт у вас будет работа с сервером, тут уже точно никаких перезагрузок не получится
-
-//Это очень плохой комментарий для ревьювера.
-
-//И почитайте про использование setAttrubute для disabled https://stackoverflow.com/questions/7526601/setattributedisabled-false-changes-editable-attribute-to-false
-
-
 // @todo: Темплейт карточки
 //получим template для создания карточки
 const cardTemplate = document.querySelector('#card-template').content;
@@ -35,7 +26,6 @@ function createCard(card, deleteCard) {
     const cardTitle = cardElement.querySelector('.card__title');
     const cardImage = cardElement.querySelector('.card__image');
     
-
     // наполним содержимым
     cardTitle.textContent = card.name;
     cardImage.src = card.link;
@@ -50,7 +40,6 @@ function createCard(card, deleteCard) {
     // cardElement.querySelector('.card__delete-button').addEventListener('click', function (event){
     //     deleteOnEvent(event);
     // });
-
     
     return cardElement;
 }
@@ -82,7 +71,6 @@ initialCards.forEach((item) => {
 
 //--------------------------EXTRA--------------------------------------------
 
-
 //функция для обновления списка карточек - удаляет все загруженные и заново подргужает список из initialCards
 function reloadCardList() {
     const allCards=document.querySelectorAll('.card')
@@ -107,18 +95,7 @@ function checkCardsCount () {
 }
 
 //если на данный момент все карточки из initialCards отображены - дизейблим кнопку
-
 function checkReloadButton() {
-    //ЭТО НЕ БУДЕТ РАБОТАТЬ https://stackoverflow.com/questions/7526601/setattributedisabled-false-changes-editable-attribute-to-false
-    //reloadButton.setAttribute('disabled', cardsCount===initialCards.length)
-    //ЭТО НЕ БУДЕТ РАБОТАТЬ https://stackoverflow.com/questions/7526601/setattributedisabled-false-changes-editable-attribute-to-false
-    
-    if (cardsCount===initialCards.length) {
-        reloadButton.setAttribute('disabled', true)
-    }
-
-    else {
-        reloadButton.removeAttribute('disabled');
-    }
+    reloadButton.disabled = cardsCount===initialCards.length;
 }
 
