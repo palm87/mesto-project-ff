@@ -1,3 +1,6 @@
+import './pages/index.css';
+import {initialCards} from './scripts/cards.js'
+// import {createCard} from './components/card.js';
 // @todo: Темплейт карточки
 //получим template для создания карточки
 const cardTemplate = document.querySelector('#card-template').content;
@@ -130,7 +133,7 @@ const zeroPlaces = document.querySelector('.places-zero');
 let cardsCount=0;
 
 
-//@todo: Функция создания карточки
+// //@todo: Функция создания карточки
 function createCard(card, deleteCard, likeCardHandler) {
     
     //клонируем содержимое template
@@ -165,16 +168,8 @@ function createCard(card, deleteCard, likeCardHandler) {
         console.log(evt.target)
         poppedImage.src=evt.target.src;
         poppedImageCaption.textContent=evt.target.alt
-        openPopup(popupImage);
-        
-        
-    })
-
-
-    
-    // cardElement.querySelector('.card__delete-button').addEventListener('click', () => {
-    //     deleteCard(cardElement);
-    // });    
+        openPopup(popupImage);  
+    })  
     return cardElement;
 }
 
