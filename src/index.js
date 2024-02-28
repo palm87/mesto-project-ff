@@ -1,35 +1,24 @@
 import './pages/index.css';
 import {initialCards} from './scripts/cards.js'
-import {createCard, deleteCard, likeCardHandler,renderCard} from "./components/card.js";
+import {createCard, deleteCard, likeCardHandler, renderCard} from "./components/card.js";
 import {openPopup, closePopup} from "./components/modal.js";
 
 
-// @todo: DOM узлы
-
-
 //переменные для формы редактирования профиля
-const formEditProfile = document.forms['edit-profile'];
-const editProfileButton = document.querySelector('.profile__edit-button');
+const formEditProfile = document.forms['edit-profile']; //форма
+const editProfileButton = document.querySelector('.profile__edit-button'); //кнопка
+const popupEditProfile = document.querySelector('.popup_type_edit'); //окно попапа
+const profileName = document.querySelector('.profile__title'); //имя профиля
+const profileNameInput = document.querySelector('.popup__input_type_name'); //строка ввода имени профиля
+const profileDescription = document.querySelector('.profile__description'); //описание профиля
+const profileDescriptionInput = document.querySelector('.popup__input_type_description'); //строка ввода описания профиля
 
-//переменые для попапа с редактированием профиля
-const popupEditProfile = document.querySelector('.popup_type_edit');
-const profileName = document.querySelector('.profile__title');
-const profileNameInput = document.querySelector('.popup__input_type_name');
-const profileDescription = document.querySelector('.profile__description');
-const profileDescriptionInput = document.querySelector('.popup__input_type_description');
-
-//переменная формы для добавления новой карточки
+//переменная для формы, из которой добавляется новое место
 const formAddNewCard = document.forms['new-place'];
-
-//переменная для попапа добавления новой карточки
+//переменная для попапа добавления новой карточки с местом
 const popupAddNewCard = document.querySelector('.popup_type_new-card')
-
-//переменная для кнопки добавления карточки
+//переменная для кнопки добавления карточки с новым местом
 const addNewCardButton = document.querySelector('.profile__add-button');
-
-
-
-
 
 //-----------------------------------------ПОПАПЫ--------------------------------------------------
 //функция для слушателя клика по оверлею
@@ -38,9 +27,18 @@ function overlayClickHandler(evt) {
         closePopup();
     }
 }
-
+//слушатель клика по оверлею
 document.addEventListener('click', overlayClickHandler);
 
+//функция для открытия картинки с местом в отдельном попапе
+function showBigImage (evt){
+    const popupImage = document.querySelector('.popup_type_image')
+    const poppedImage = document.querySelector('.popup__image')
+    const poppedImageCaption = document.querySelector('.popup__caption')
+    poppedImage.src=evt.target.src;
+    poppedImageCaption.textContent=evt.target.alt
+    openPopup(popupImage);  
+}
 //-----------------------------------------РЕДАКТИРОВАНИЕ ПРОФИЛЯ--------------------------------------------------
 //слушатель для открытия попапа редактирования профиля
 editProfileButton.addEventListener('click', function () {
@@ -57,8 +55,7 @@ function editProfileFormSubmit(evt) {
     closePopup()
 }
 
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
+// обработчик формы отправки отредактированного профиля
 formEditProfile.addEventListener('submit', editProfileFormSubmit);
 
 
@@ -81,7 +78,7 @@ function addNewCardFormSubmit(evt) {
     const newCard={};
     newCard.name = newCardInputName.value;
     newCard.link = newCardInputUrl.value;
-    renderCard(createCard(newCard, deleteCard), 'before');
+    renderCard(createCard(newCard, deleteCard, likeCardHandler, showBigImage), 'before');
     newCardInputName.value='';
     newCardInputUrl.value='';
     closePopup()
@@ -89,10 +86,6 @@ function addNewCardFormSubmit(evt) {
 
 // наполним страницу имеющимся массивом карточек из card.js
 initialCards.forEach((item) => {
-    renderCard(createCard(item, deleteCard, likeCardHandler), 'after');
+    renderCard(createCard(item, deleteCard, likeCardHandler, showBigImage), 'after');
 });
-
-//--------------------------EXTRA--------------------------------------------
-
-
 

@@ -17,6 +17,7 @@ export function closePopup() {
     //снимаем слушатель клика по кнопке esc
     document.removeEventListener('keydown', closePopupByEsc);
   }
+  
 export function closePopupByEsc(evt) {
     if (evt.key === 'Escape') {
         closePopup();

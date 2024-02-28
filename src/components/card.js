@@ -1,4 +1,4 @@
-import {openPopup, closePopup, closePopupByEsc} from "./modal.js";
+import {openPopup} from "./modal.js";
 
 //получим template для создания карточки
 const cardTemplate = document.querySelector('#card-template').content;
@@ -13,7 +13,7 @@ export const cardsList=document.querySelector('.places__list');
 export let cardsCount=0;
 
 //@todo: Функция создания карточки
-export function createCard(card, deleteCard, likeCardHandler) {
+export function createCard(card, deleteCardCallback, likeCardCallback, showBigImageCallback) {
     
     //клонируем содержимое template
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
@@ -30,25 +30,15 @@ export function createCard(card, deleteCard, likeCardHandler) {
     // //добавим eventListner на клик по кнопке удаления
     cardElement.addEventListener('click', (evt) => {
         if(evt.target.classList.contains('card__delete-button')) {
-            deleteCard(evt.currentTarget);
+            deleteCardCallback(evt.currentTarget);
         }
     });   
-    
-    cardsList.addEventListener('click', likeCardHandler)
+    cardsList.addEventListener('click', likeCardCallback)
 
-    //открытие попапа по клику на картинку
+    //открытие попапа с большой картинкой по клику на картинку
     const openImageButton = cardElement.querySelector('.card__image')
-    const popupImage = document.querySelector('.popup_type_image')
-    
-    // console.log(popupImage)
-    openImageButton.addEventListener('click', function(evt) {
-        const poppedImage = document.querySelector('.popup__image')
-        const poppedImageCaption = document.querySelector('.popup__caption')
-        console.log(evt.target)
-        poppedImage.src=evt.target.src;
-        poppedImageCaption.textContent=evt.target.alt
-        openPopup(popupImage);  
-    })  
+    openImageButton.addEventListener('click', showBigImageCallback)
+
     return cardElement;
 }
 
