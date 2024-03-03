@@ -1,11 +1,8 @@
 // функция для открытия попапов
 export function openPopup(popupElement) {
     popupElement.classList.add('popup_is-opened');
-    document.addEventListener('keydown', closePopupByEsc);
-    
-    //вешаем на крестик открывшегося попапа обработчик клика
-    const popupCloseButton = popupElement.querySelector('.popup__close')
-    popupCloseButton.addEventListener('click', closePopup)
+    document.addEventListener('keydown', closePopupByEsc); 
+
   }
 
  //функция для закрытия попапов 
@@ -14,12 +11,26 @@ export function closePopup() {
     const popupOpenned = document.querySelector('.popup_is-opened')
     //закрываем его, убирая класс 
     popupOpenned.classList.remove('popup_is-opened');
-    //снимаем слушатель клика по кнопке esc
-    document.removeEventListener('keydown', closePopupByEsc);
+    document.removeEventListener('keydown', closePopupByEsc); 
   }
-  
-export function closePopupByEsc(evt) {
-    if (evt.key === 'Escape') {
-        closePopup();
-    }
+
+ //найдем все попапы 
+const popups = document.querySelectorAll('.popup')
+//на каждый попап повесим слушатель клика по оверлею и клику по крестику
+popups.forEach((popup) => {
+    popup.addEventListener('mousedown', (evt) => {
+        if (evt.target.classList.contains('popup')) {
+          closePopup(popup)
+        }
+        if (evt.target.classList.contains('popup__close')) {
+          closePopup(popup)
+        }
+    })
+  }
+)
+
+function closePopupByEsc(evt) { 
+  if (evt.key === 'Escape') { 
+      closePopup(); 
+  } 
 }

@@ -1,6 +1,6 @@
 import './pages/index.css';
 import {initialCards} from './scripts/cards.js'
-import {createCard, deleteCard, likeCardHandler, renderCard} from "./components/card.js";
+import {createCard, deleteCard, likeCardHandler, cardsList, cardsCount} from "./components/card.js";
 import {openPopup, closePopup} from "./components/modal.js";
 
 
@@ -20,22 +20,17 @@ const popupAddNewCard = document.querySelector('.popup_type_new-card')
 //переменная для кнопки добавления карточки с новым местом
 const addNewCardButton = document.querySelector('.profile__add-button');
 
+
+//переменные для попапа с большой картинкой
+const popupImage = document.querySelector('.popup_type_image')
+const poppedImage = document.querySelector('.popup__image')
+const poppedImageCaption = document.querySelector('.popup__caption')
 //-----------------------------------------ПОПАПЫ--------------------------------------------------
-//функция для слушателя клика по оверлею
-function overlayClickHandler(evt) {
-    if (evt.target.classList.contains('popup')) {
-        closePopup();
-    }
-}
-//слушатель клика по оверлею
-document.addEventListener('click', overlayClickHandler);
 
 //функция для открытия картинки с местом в отдельном попапе
 function showBigImage (evt){
-    const popupImage = document.querySelector('.popup_type_image')
-    const poppedImage = document.querySelector('.popup__image')
-    const poppedImageCaption = document.querySelector('.popup__caption')
     poppedImage.src=evt.target.src;
+    poppedImage.alt=evt.target.alt
     poppedImageCaption.textContent=evt.target.alt
     openPopup(popupImage);  
 }
@@ -79,9 +74,21 @@ function addNewCardFormSubmit(evt) {
     newCard.name = newCardInputName.value;
     newCard.link = newCardInputUrl.value;
     renderCard(createCard(newCard, deleteCard, likeCardHandler, showBigImage), 'before');
-    newCardInputName.value='';
-    newCardInputUrl.value='';
+    evt.target.reset()
     closePopup()
+}
+
+//функция добавления карточки в отображенный список на странице
+function renderCard (card, position='after') {
+    if (position==='before') {
+        cardsList.prepend(card);
+    }
+    if (position==='after') {
+        cardsList.append(card);
+    }
+    else cardsList.prepend(card);
+    // cardsCount+=1;
+    // checkCardsCount();
 }
 
 // наполним страницу имеющимся массивом карточек из card.js
