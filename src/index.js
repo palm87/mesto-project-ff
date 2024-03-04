@@ -19,6 +19,8 @@ const formAddNewCard = document.forms['new-place'];
 const popupAddNewCard = document.querySelector('.popup_type_new-card')
 //переменная для кнопки добавления карточки с новым местом
 const addNewCardButton = document.querySelector('.profile__add-button');
+const newCardInputName = document.querySelector('.popup__input_type_card-name');
+const newCardInputUrl = document.querySelector('.popup__input_type_url');
 
 
 //переменные для попапа с большой картинкой
@@ -68,8 +70,8 @@ formAddNewCard.addEventListener('submit', addNewCardFormSubmit);
 // функция добавления новой карточки на станицу (обработчик формы)
 function addNewCardFormSubmit(evt) {
     evt.preventDefault(); 
-    const newCardInputName = document.querySelector('.popup__input_type_card-name');
-    const newCardInputUrl = document.querySelector('.popup__input_type_url');
+    // const newCardInputName = document.querySelector('.popup__input_type_card-name');
+    // const newCardInputUrl = document.querySelector('.popup__input_type_url');
     const newCard={};
     newCard.name = newCardInputName.value;
     newCard.link = newCardInputUrl.value;
