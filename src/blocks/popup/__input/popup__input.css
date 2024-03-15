@@ -13,7 +13,7 @@
 .popup__input:last-of-type {
   margin-bottom: 0;
 }
-
+  
 @media screen and (max-width: 568px) {
   .popup__title {
     font-size: 12px;
