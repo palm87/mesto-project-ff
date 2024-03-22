@@ -113,5 +113,5 @@ export function clearValidation (formElement, config) {
     
     const submitButton = formElement.querySelector(config['submitButtonSelector'])
     submitButton.classList.remove(config['inactiveButtonClass'])
-    toggleButtonState(inputErrorList, submitButton)
+    // toggleButtonState(inputErrorList, submitButton)
 }

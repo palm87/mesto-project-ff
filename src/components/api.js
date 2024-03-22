@@ -1,9 +1,42 @@
-return fetch('https://nomoreparties.co/v1/wff-cohort-9/cards', {
-  headers: {
-    authorization: '10c1d3be-59bf-42c2-a7cc-3e9744607a63'
+const configApi = {
+    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-9',
+    headers: {
+      authorization: '10c1d3be-59bf-42c2-a7cc-3e9744607a63',
+      'Content-Type': 'application/json'
+    }
   }
-})
-  .then(res => res.json())
-  .then((result) => {
-    console.log(result);
-  });
+
+function handleResponse(response) {
+    if (response.ok) {
+        return response.json()
+    }
+    else {
+        return Promise.reject(error);
+    }
+
+}
+
+export function handleError(error) {
+    console.log('Возникла ошибка: ' + error)
+
+}
+
+
+
+export function getData (uri) {
+    const targetUrl = configApi.baseUrl + uri
+    return fetch(targetUrl, {headers:configApi.headers})
+        .then(handleResponse)
+}
+
+export function changeData(uri, data, method='POST') {
+    const targetUrl = configApi.baseUrl + uri
+    const body = JSON.stringify(data);
+    return fetch(targetUrl, {
+        method: method,
+        body: body,
+        headers: configApi.headers})
+        .then(handleResponse)
+}
+
+

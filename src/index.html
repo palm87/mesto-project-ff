@@ -14,14 +14,16 @@
 <div class="page__content">
   <header class="header page__section">
     <img src="<%=require('./images/logo.svg')%>" alt="Логотип проекта место" class="logo header__logo">
+    
   </header>
   <main class="content">
     <section class="profile page__section">
-      <div class="profile__image" style="background-image: url(<%=require('./images/avatar.jpg')%>)"></div>
+      <!-- <div class="profile__image" style="background-image: url(<%=require('./images/avatar.jpg')%>)"></div> -->
+      <div class="profile__image" style=""></div>
       <div class="profile__info">
-        <h1 class="profile__title">Жак-Ив Кусто</h1>
+        <h1 class="profile__title"></h1>
         <button class="profile__edit-button" aria-label="Кнопка редактирования профиля" type="button"></button>
-        <p class="profile__description">Исследователь океана</p>
+        <p class="profile__description"></p>
       </div>
       <div class="profile__buttons">
         <button class="profile__add-button" aria-label="Кнопка добавления места" type="button"></button>
@@ -90,7 +92,7 @@
         <span class="popup__input_type_card-name-error  form__input-error"></span>
         <input type="url" name="link" id="popup__input_type_url" class="popup__input popup__input_type_url" 
         placeholder="Ссылка на картинку" 
-        pattern="(^https?:\/\/)?[a-z0-9~_\-\.]+\.[a-z]{2,9}(\/|:|\?[!-~]*)?$"
+        pattern="(^https?:\/\/.*)"
         data-error-message-pattern="Введите URL"
         required>
         <span class="popup__input_type_url-error form__input-error "></span>
@@ -112,12 +114,14 @@
 
 <template id="card-template">
   <li class="places__item card">
-    <img class="card__image" src="" alt="" />
+    <img class="card__image" src="" alt=""/>
     <button type="button" aria-label="Кнопка удаления места" class="card__delete-button"></button>
     <div class="card__description">
       <h2 class="card__title">
       </h2>
+    <div class="card__like-container">
       <button type="button" aria-label="Кнопка лайка места" class="card__like-button"></button>
+      <p class="card__like-counter"></p>
     </div>
   </li>
 </template>
