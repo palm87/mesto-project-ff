@@ -11,12 +11,16 @@ const formEditProfile = document.forms['edit-profile']; //форма
 const editProfileButton = document.querySelector('.profile__edit-button'); //кнопка
 const popupEditProfile = document.querySelector('.popup_type_edit'); //окно попапа
 const profileName = document.querySelector('.profile__title'); //имя профиля
-
-const profileNameInput = document.querySelector('.popup__input_type_name'); //строка ввода имени профиля
 const profileDescription = document.querySelector('.profile__description'); //описание профиля
+const profileNameInput = document.querySelector('.popup__input_type_name'); //строка ввода имени профиля
 const profileDescriptionInput = document.querySelector('.popup__input_type_description'); //строка ввода описания профиля
 const profileId = 0; //id профиля
-const profileAvatar = document.querySelector('.profile__image')
+
+const profileAvatar = document.querySelector('.profile__image') //картинка профиля
+const avatarEditForm = document.forms['avatar'] //форма редактирования аватара
+const popupNewAvatar = document.querySelector('.popup_type_avatar')
+const newAvatarInputUrl = document.querySelector('.popup__input_avatar_url');
+
 //переменная для формы, из которой добавляется новое место
 const formAddNewCard = document.forms['new-place'];
 //переменная для попапа добавления новой карточки с местом
@@ -47,8 +51,25 @@ editProfileButton.addEventListener('click', function () {
     profileDescriptionInput.value=profileDescription.textContent;
     clearValidation(formEditProfile, validationConfig)
     openPopup(popupEditProfile); 
-    
 })
+
+
+//попап редактирования аватара профиля
+profileAvatar.addEventListener('click', function() {
+    openPopup(popupNewAvatar)
+} )
+
+avatarEditForm.addEventListener('submit', function(evt) {
+    evt.preventDefault(); 
+    const newUrl = newAvatarInputUrl.value
+    const body = {avatar: newUrl}
+    changeData('/users/me/avatar', body, 'PATCH')
+        .then(profileData => {
+            profileAvatar.style = `background-image: url('${profileData.avatar}')`
+        })
+        .catch(handleError)
+    closePopup()
+});
 
 //заполняем профиль даными с сервера
 getData('/users/me')

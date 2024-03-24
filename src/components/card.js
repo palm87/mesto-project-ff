@@ -27,15 +27,14 @@ export function createCard(cardData, currentProfileId, deleteCardCallback, likeC
     //проверим, кто владелец карточки, если текущий пользователь - повесим слушатель, 
     // в противном случае - уберем кнопку удаления
     // if (currentProfileId==cardData.owner._id) {
-        if (checkCardsOwner(cardData, currentProfileId)) {
+    if (checkCardsOwner(cardData, currentProfileId)) {
         cardElement.addEventListener('click', (evt) => {
             if(evt.target.classList.contains('card__delete-button')) {
-                deleteCardCallback(evt.currentTarget);
+                deleteCardCallback(cardData, cardElement);
             }
         })}
-        else 
-        {
-            cardElement.querySelector('.card__delete-button').remove() }
+    else {
+        cardElement.querySelector('.card__delete-button').remove() }
         
 
      if(didILikeIt(cardData, currentProfileId)) {
@@ -51,8 +50,12 @@ export function createCard(cardData, currentProfileId, deleteCardCallback, likeC
 }
 
 //функция удаления карточки
-export function deleteCard(card) {
-    card.remove();
+export function deleteCard(cardData, cardElement) {
+    changeData(`/cards/${cardData._id}`, {}, 'DELETE')
+        .then(res => {
+            cardElement.remove();
+        })
+    
 }
 
 export function likeCardHandler(cardData, cardLikeButton, currentProfileId, cardLikesCount) {  
