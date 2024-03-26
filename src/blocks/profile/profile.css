@@ -21,7 +21,6 @@
   }
 }
 
-
 .form__input-error {
   font-family: 'Inter';
   font-style: normal;
@@ -29,9 +28,13 @@
   font-size: 12px;
   line-height: 15px;
   color: #FF0000;
+  opacity: 0;
+  transition: .3s;
+  bottom: 0px;
+  display: block;
   }
-  
-  .form__input-error_active {
+
+  .popup__error_visible {
     opacity: 1;
   }
 
@@ -53,10 +56,11 @@
     gap: 3px
   }
 
-  .card__like-counter{
+  .card__like-counter {
     margin:0;
     font-size: 13px;
     line-height: 16px;
     text-align: center;
     color: black;
   }
+

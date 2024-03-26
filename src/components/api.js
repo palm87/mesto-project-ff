@@ -29,6 +29,14 @@ export function getData (uri) {
         .then(handleResponse)
 }
 
+export function getHead(url) {
+    return fetch(url, {method: 'HEAD'})
+        .then(result => {return result.headers.get('Content-Type')})
+      
+     
+}
+
+
 export function changeData(uri, data, method='POST') {
     const targetUrl = configApi.baseUrl + uri
     const body = JSON.stringify(data);

@@ -6,9 +6,6 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mesto</title>
-  <!-- <link rel="stylesheet" href="./pages/index.css"> -->
-  <!-- <script src="./scripts/cards.js" defer></script> -->
-  <!-- <script src="./scripts/index.js" defer></script> -->
 </head>
 <body class="page">
 <div class="page__content">
@@ -18,7 +15,6 @@
   </header>
   <main class="content">
     <section class="profile page__section">
-      <!-- <div class="profile__image" style="background-image: url(<%=require('./images/avatar.jpg')%>)"></div> -->
       <div class="profile__image" style=""></div>
       <div class="profile__info">
         <h1 class="profile__title"></h1>
@@ -30,7 +26,6 @@
       </div>
     </section>
     <section class="places page__section">
-      <p class="places-zero hide-it">Пользователь еще не добавил ни одного места.</p>
       <ul class="places__list">
       </ul>
     </section>
@@ -47,16 +42,16 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile" novalidate>
-        <input type="text" 
-        name="name"
-        id="profile_name_input" 
-        class="popup__input popup__input_type_name" 
-        placeholder="Имя" 
-        minlength="2" 
-        maxlength="40"
-        pattern="^[a-zA-Zа-яА-Я\s\-]+$"
-        data-error-message-pattern="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы"
-        required>
+          <input type="text" 
+          name="name"
+          id="profile_name_input" 
+          class="popup__input popup__input_type_name" 
+          placeholder="Имя" 
+          minlength="2" 
+          maxlength="40"
+          pattern="^[a-zA-Zа-яА-Я\s\-]+$"
+          data-error-message-pattern="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы"
+          required>
         <span class="profile_name_input-error form__input-error"></span>
         <input 
         type="text" 
@@ -126,6 +121,17 @@
     </div>
   </div>
 </div>
+
+   <!-- попап подтверждения удаления карточки -->
+   <div class="popup popup_type_avatar popup_is-animated">
+    <div class="popup__content popup__delete-confirmation">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Вы уверены?</h3>
+      <form class="popup__form" name="delete-confirmation">
+        <button type="submit" class="button popup__button">Да</button>
+      </form>
+    </div>
+  </div>
 
 
 <template id="card-template">

@@ -50,7 +50,7 @@ function hasInvalidInput (inputList) {
     })
   }
 
-    //функция для проверки, не нужно ли заблокировать кнопку отправки формы(список полей формы, валидность которых проверяется, кнопка, которую блокируем)
+  //функция для проверки, не нужно ли заблокировать кнопку отправки формы(список полей формы, валидность которых проверяется, кнопка, которую блокируем)
 function toggleButtonState(inputList, buttonElement) {
     //если хоть какое-то поле невалидно
     if (hasInvalidInput(inputList)) {
@@ -65,8 +65,8 @@ function toggleButtonState(inputList, buttonElement) {
 
     //функция для отображение валидности введенных данных (передаем форму, поле ввода)
 function checkInputValidity(formElement, inputElement) {
-        //если в поле ввода есть ошибка валидности из-за несоответствия паттерну
-        if (inputElement.validity.patternMismatch) {
+  //если в поле ввода есть ошибка валидности из-за несоответствия паттерну
+  if (inputElement.validity.patternMismatch) {
             //поставим элементу кастомное сообщение об ошибке из дата-атрибута
         inputElement.setCustomValidity(inputElement.dataset.errorMessagePattern);
       } else {

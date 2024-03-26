@@ -36,7 +36,7 @@ export function createCard(cardData, currentProfileId, deleteCardCallback, likeC
     else {
         cardElement.querySelector('.card__delete-button').remove() }
         
-
+    //если мы уже лайкали карточку - рисуем сердечко
      if(didILikeIt(cardData, currentProfileId)) {
         cardLikeButton.classList.add('card__like-button_is-active')
      }       
@@ -69,20 +69,12 @@ export function likeCardHandler(cardData, cardLikeButton, currentProfileId, card
     cardLikeButton.classList.toggle('card__like-button_is-active');
 }
 
-
-//при отрисовке карточек
-//для каждой карточки, которую отрисовываем
-//проверить есть ли среди списка лайкнувших текущий пользователь
-//если есть - отрисовываем сердечко cardLikeButton.classList.add('card__like-button_is-active')
-//если нет - ничего не делаем
-
-
-//функция для проверки, является ли текущий пользователь владельцем карточки
+// функция для проверки, является ли текущий пользователь владельцем карточки
 function checkCardsOwner(card, currentProfileId){
     return currentProfileId===card.owner._id
 }
 
-//функция для проверки, ставился ли мной лайк для данной карточки
+// функция для проверки, ставился ли мной лайк для данной карточки
 function didILikeIt(card, currentProfileId) {
     const idsLiked=card.likes.map(user => user._id)
     return idsLiked.some(function(id) {
@@ -90,6 +82,7 @@ function didILikeIt(card, currentProfileId) {
     })
 }
 
+// функция для отрисовки количества лайков
 function changeLikesCount(cardId, method, cardLikesCount, cardData) {
     changeData(`/cards/likes/${cardId}`, {}, method)
         .then(result => {
