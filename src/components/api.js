@@ -6,6 +6,16 @@ const configApi = {
     }
   }
 
+export const uriBook= {
+    currentProfile: '/users/me',
+    currentAvatar: '/users/me/avatar',
+    allCards: '/cards',
+    allLikes: `/cards/likes/`,
+    
+
+
+}  
+
 function handleResponse(response) {
     if (response.ok) {
         return response.json()

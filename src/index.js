@@ -3,7 +3,7 @@ import {initialCards} from './scripts/cards.js'
 import {createCard, deleteCard, likeCardHandler, cardsList, cardsCount} from "./components/card.js";
 import {openPopup, closePopup} from "./components/modal.js";
 import {enableValidation, clearValidation, validationConfig} from "./components/validation.js"
-import {getData, changeData, getHead, handleError} from './components/api.js';
+import {getData, changeData, getHead, handleError, uriBook} from './components/api.js';
 
 
 //переменные для формы редактирования профиля
@@ -70,7 +70,7 @@ avatarEditForm.addEventListener('submit', function(evt) {
     evt.preventDefault(); 
     const newUrl = newAvatarInputUrl.value
     const body = {avatar: newUrl}
-    changeData('/users/me/avatar', body, 'PATCH')
+    changeData(uriBook.currentAvatar, body, 'PATCH')
         .then(profileData => {
             profileAvatar.style = `background-image: url('${profileData.avatar}')`
         })
@@ -78,14 +78,20 @@ avatarEditForm.addEventListener('submit', function(evt) {
     closePopup()
 });
 
-//заполняем профиль даными с сервера
-getData('/users/me')
+// функция отрисовки и получения данных профиля
+function getProfileInfo(uri) {
+    getData(uri)
     .then(data => {
         profileName.textContent = data.name
         profileDescription.textContent=data.about
         profileAvatar.style = `background-image: url('${data.avatar}')`;
-
     })
+}
+
+getProfileInfo(uriBook.currentProfile)
+
+
+
 
 // функция для сохранения отредактированного профиля
 function editProfileFormSubmit(evt) {
@@ -93,7 +99,7 @@ function editProfileFormSubmit(evt) {
     const body={name: profileNameInput.value,
     about: profileDescriptionInput.value
     }
-    changeData('/users/me', body, 'PATCH')
+    changeData(uriBook.currentProfile, body, 'PATCH')
         .then(result => {
             profileName.textContent=result.name
             profileDescription.textContent=result.about
@@ -132,7 +138,7 @@ function addNewCardFormSubmit(evt) {
     getHead(newCardInputUrl.value)
     .then(data => {
         if(data.includes('image')) {
-            changeData('/cards', newCard, 'POST')
+            changeData(uriBook.allCards, newCard, 'POST')
                 .then(cardData => {
                 renderLoading(true)
                 renderCard(createCard(cardData, cardData.owner._id, deleteCard, likeCardHandler, showBigImage))
@@ -203,7 +209,7 @@ enableValidation(validationConfig)
 
 // загрузим с сервера имеющиеся карточки, для этого сделаем 2 запроса: массив имеющихся карточек 
 // и данные о текущем пользователе
-Promise.all([getData('/cards'), getData('/users/me')])
+Promise.all([getData(uriBook.allCards), getData(uriBook.currentProfile)])
     .then(data =>{
         const dataCards=data[0]
         const dataProfile=data[1]
