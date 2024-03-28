@@ -54,7 +54,7 @@ export function changeData(uri, data, method='POST') {
         method: method,
         body: body,
         headers: configApi.headers})
-        .then(handleResponse)
+    .then(handleResponse)
 }
 
 

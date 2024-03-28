@@ -12,9 +12,9 @@ export function enableValidation(config) {
     const formList = Array.from(document.querySelectorAll(config['formSelector']));
     //для каждой форы сбрасываем событие по умолчанию для отправки и навешиваем слушатель, проверяющий валидность данных
     formList.forEach(function (formElement) {
-        formElement.addEventListener('submit', function (evt) {
-            evt.preventDefault;
-    })
+    //     formElement.addEventListener('submit', function (evt) {
+    //         evt.preventDefault;
+    // })
     setEventListeners(formElement)
 })
 }

@@ -5,34 +5,29 @@ import {openPopup, closePopup} from "./components/modal.js";
 import {enableValidation, clearValidation, validationConfig} from "./components/validation.js"
 import {getData, changeData, getHead, handleError, uriBook} from './components/api.js';
 
+//--------------------------------ПЕРЕМЕННЫЕ ДЛЯ ПРОФИЛЯ-----------------------
 
-//переменные для формы редактирования профиля
-const formEditProfile = document.forms['edit-profile']; //форма
-const editProfileButton = document.querySelector('.profile__edit-button'); //кнопка для открытия попапа редактирования профиля
+const editProfileButton = document.querySelector('.profile__edit-button'); //кнопка открытия попапа редактирования профиля
 const popupEditProfile = document.querySelector('.popup_type_edit'); //попап с формой редактирования профиля
+const formEditProfile = document.forms['edit-profile']; //форма редактирования профиля
 const profileName = document.querySelector('.profile__title'); //имя профиля
 const profileDescription = document.querySelector('.profile__description'); //описание профиля
+const profileAvatar = document.querySelector('.profile__image') //картинка аватара
 const profileNameInput = document.querySelector('.popup__input_type_name'); //строка ввода имени профиля
 const profileDescriptionInput = document.querySelector('.popup__input_type_description'); //строка ввода описания профиля
-const profileId = 0; //id профиля
-
-//редактирование аватара
-const profileAvatar = document.querySelector('.profile__image') //картинка аватара
+// const profileId = 0; //id профиля
 const avatarEditForm = document.forms['avatar'] //форма редактирования аватара
-const popupNewAvatar = document.querySelector('.popup_type_avatar') //попап с формой аватара
+const popupNewAvatar = document.querySelector('.popup_type_avatar') //попап с формой редактирования аватара
 const newAvatarInputUrl = document.querySelector('.popup__input_avatar_url'); //строка ввода ссылки нового аватара
 
-//переменная для формы, из которой добавляется новое место
-const formAddNewCard = document.forms['new-place'];
-//переменная для попапа добавления новой карточки с местом
-const popupAddNewCard = document.querySelector('.popup_type_new-card')
-//переменная для кнопки добавления карточки с новым местом
-const addNewCardButton = document.querySelector('.profile__add-button');
-const newCardInputName = document.querySelector('.popup__input_type_card-name');
-const newCardInputUrl = document.querySelector('.popup__input_type_url');
 
-//подтверждение удаления карточки
-const deleteConfirmationForm = document.forms['delete-confirmation'] //форма
+//-------------------------ПЕРЕМЕННЫЕ ДЛЯ КАРТОЧЕК--------
+const popupAddNewCard = document.querySelector('.popup_type_new-card') //попап добавления новой карточки
+const formAddNewCard = document.forms['new-place']; //форма добавления новой карточки
+const addNewCardButton = document.querySelector('.profile__add-button'); //кнопка добавления карточки с новым местом
+const newCardInputName = document.querySelector('.popup__input_type_card-name'); //строка ввода названия карточки
+const newCardInputUrl = document.querySelector('.popup__input_type_url'); //строка ввода ссылки на картинку
+const deleteConfirmationForm = document.forms['delete-confirmation'] //форма удаления карточки
 const popupDeleteCard = document.querySelector('.popup__delete-confirmation') //попап
 
 
@@ -52,6 +47,9 @@ function showBigImage (evt){
     openPopup(popupImage);  
 }
 //-----------------------------------------РЕДАКТИРОВАНИЕ ПРОФИЛЯ--------------------------------------------------
+// получение данных о профиле
+getProfileInfo(uriBook.currentProfile)
+
 //слушатель для открытия попапа редактирования профиля
 editProfileButton.addEventListener('click', function () {
     profileNameInput.value=profileName.textContent;
@@ -61,11 +59,12 @@ editProfileButton.addEventListener('click', function () {
 })
 
 
-//попап редактирования аватара профиля
+// слушатель кнопки открытия попапа редактирования аватара профиля
 profileAvatar.addEventListener('click', function() {
     openPopup(popupNewAvatar)
 } )
 
+//слушатель формы редактирования аватара
 avatarEditForm.addEventListener('submit', function(evt) {
     evt.preventDefault(); 
     const newUrl = newAvatarInputUrl.value
@@ -78,7 +77,7 @@ avatarEditForm.addEventListener('submit', function(evt) {
     closePopup()
 });
 
-// функция отрисовки и получения данных профиля
+// ф-ия отрисовки и получения данных профиля
 function getProfileInfo(uri) {
     getData(uri)
     .then(data => {
@@ -88,12 +87,7 @@ function getProfileInfo(uri) {
     })
 }
 
-getProfileInfo(uriBook.currentProfile)
-
-
-
-
-// функция для сохранения отредактированного профиля
+// ф-ия сохранения отредактированного профиля
 function editProfileFormSubmit(evt) {
     evt.preventDefault(); 
     const body={name: profileNameInput.value,
@@ -109,7 +103,7 @@ function editProfileFormSubmit(evt) {
     closePopup()
 }
 
-// обработчик формы отправки отредактированного профиля
+// обработчик формы редактирования профиля
 formEditProfile.addEventListener('submit', editProfileFormSubmit);
 
 
@@ -119,74 +113,31 @@ addNewCardButton.addEventListener('click', function () {
     // clearValidation(formAddNewCard, validationConfig)
     formAddNewCard.reset()
     openPopup(popupAddNewCard);
-    
-    
 })
 
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-formAddNewCard.addEventListener('submit', addNewCardFormSubmit);
-
-
-// функция добавления новой карточки на страницу (обработчик формы)
+// обраотчик формы сохранения новой карточки
 function addNewCardFormSubmit(evt) {
     evt.preventDefault(); 
     const newCard={};
     newCard.name = newCardInputName.value;
     newCard.link = newCardInputUrl.value;
 
-    getHead(newCardInputUrl.value)
-    .then(data => {
-        if(data.includes('image')) {
-            changeData(uriBook.allCards, newCard, 'POST')
-                .then(cardData => {
-                renderLoading(true)
-                renderCard(createCard(cardData, cardData.owner._id, deleteCard, likeCardHandler, showBigImage))
-                evt.target.reset()
-                closePopup()
-            })  
-            .catch(handleError)
-            .finally(renderLoading(false))  
-    }
-        else {
-        console.log("ERROR")
-        }   })
-        .catch(handleError)
+    changeData(uriBook.allCards, newCard, 'POST')
+        .then(cardData => {
+            renderLoading(true)
+            renderCard(createCard(cardData, cardData.owner._id, deleteCard, likeCardHandler, showBigImage))
+        evt.target.reset()
         
-            // .finally(renderLoading(false))
-        }
+        closePopup()
 
-    // changeData('/cards', newCard, 'POST')
-    //     .then(cardData => {
-    //         renderCard(createCard(cardData, cardData.owner._id, deleteCard, likeCardHandler, showBigImage), 'before')
-    // })
-    //     .catch(handleError)
-    // evt.target.reset()
-    // closePopup()
+        })
+        .catch(handleError)
+        .finally(renderLoading(false)) 
 
+}
 
-    // getHead(newCardInputUrl.value)
-    //     .then(data => {
-    //     if(data.includes('image')) {
-    //         changeData('/cards', newCard, 'POST')
-    //             .then(cardData => {
-    //                 renderLoading(true)
-    //                 renderCard(createCard(cardData, cardData.owner._id, deleteCard, likeCardHandler, showBigImage))
-    //                 evt.target.reset()
-    //                 closePopup()
-    //             })  
-    //             .catch(handleError)
-    //             .finally(renderLoading(false))
-  
-            
-    //     }
-    //     else {
-    //         console.log("ERROR")
-    //     }})
-    //     .catch(handleError)
-  
-
-    
+// слушатель отправки формы сохранения новой карточки
+formAddNewCard.addEventListener('submit', addNewCardFormSubmit);    
 
 //функция добавления карточки в отображенный список на странице с возможностью указать позицию(добавляем в конец или в начало списка)
 function renderCard (card, position='before') {
@@ -199,13 +150,6 @@ function renderCard (card, position='before') {
     else cardsList.prepend(card);
 }
 
-// // функция добавления карточки в отображенный список на странице 
-// function renderCard (cardData) {
-//     cardsList.append(cardData);
-// }
-
-
-enableValidation(validationConfig)
 
 // загрузим с сервера имеющиеся карточки, для этого сделаем 2 запроса: массив имеющихся карточек 
 // и данные о текущем пользователе
@@ -219,7 +163,7 @@ Promise.all([getData(uriBook.allCards), getData(uriBook.currentProfile)])
         })
     .catch(handleError)
 
-
+// отрисовка "Сохранение..." на кнопке в процессе отправки данных
 function renderLoading(isLoading) {
         //найдем открытый попап
         const opennedPopup = document.querySelector('.popup_is-opened')
@@ -227,9 +171,11 @@ function renderLoading(isLoading) {
         const submitButton = opennedPopup.querySelector('.popup__button')
         if(isLoading) {
             submitButton.textContent="Сохранение..."
-         
         }
         else {
             submitButton.textContent="Сохранить"
         }
       }
+
+// включение валидации полей
+enableValidation(validationConfig)
