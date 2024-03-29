@@ -1,7 +1,7 @@
 .profile__add-button {
   width: 150px;
   height: 50px;
-  background: transparent url("../../../images/add-icon.svg") center no-repeat;
+  background: transparent url('../../../images/add-icon.svg') center no-repeat;
   background-size: 22px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -33,11 +33,11 @@
   }
 }
 
-
 .profile__reload-button {
   width: 150px;
   height: 50px;
-  background: transparent url("../../../images/reload-icon.svg") center no-repeat;
+  background: transparent url('../../../images/reload-icon.svg') center
+    no-repeat;
   background-size: 30px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -75,7 +75,6 @@
   .profile__buttons {
     flex-direction: column;
     width: 100%;
-  
   }
 }
 
@@ -83,5 +82,4 @@
   display: flex;
   gap: 20px;
   margin-left: auto;
-
 }

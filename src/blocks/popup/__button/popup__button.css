@@ -10,7 +10,9 @@
   background: #000;
   border-radius: 2px;
   border: none;
-  transition: visibility 0s, background 0.3s;
+  transition:
+    visibility 0s,
+    background 0.3s;
   margin-top: 48px;
 }
 
@@ -19,14 +21,12 @@
   cursor: pointer;
 }
 
-.popup__button_disabled  {
+.popup__button_disabled {
   /* Создать */
-  color: #C4C4C4;
-  border: 1px solid #C4C4C4;
+  color: #c4c4c4;
+  border: 1px solid #c4c4c4;
   background: transparent;
   pointer-events: none;
-
-
 }
 
 @media screen and (max-width: 568px) {

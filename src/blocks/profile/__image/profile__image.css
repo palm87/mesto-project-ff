@@ -11,7 +11,7 @@
 }
 
 .profile__image::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -20,12 +20,17 @@
   background-image: url('/src/images/Vector.svg');
   background-position: center; /* Изображение будет расположено по центру контейнера */
   background-repeat: no-repeat;
-  background-color: rgba(0, 0, 0, 0.8); /* Применяем фильтр, например, полупрозрачный чёрный цвет */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.8
+  ); /* Применяем фильтр, например, полупрозрачный чёрный цвет */
   opacity: 0; /* Начальная прозрачность */
-  transition: opacity 0.3s ease; 
+  transition: opacity 0.3s ease;
 }
 
-.profile__image:hover::before{
+.profile__image:hover::before {
   opacity: 1;
   cursor: pointer;
 }
