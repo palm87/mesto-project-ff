@@ -13,18 +13,7 @@ export function closePopup() {
   document.removeEventListener('keydown', closePopupByEsc);
 }
 
-// повесим на все попапы слушатели кликов по оверлею и крестику
-const allPopups = document.querySelectorAll('.popup');
-allPopups.forEach((popup) => {
-  popup.addEventListener('mousedown', (evt) => {
-    if (evt.target.classList.contains('popup')) {
-      closePopup();
-    }
-    if (evt.target.classList.contains('popup__close')) {
-      closePopup();
-    }
-  });
-});
+
 
 // фунция закрытия попапа по клику (для передачи в слушатель)
 function closePopupByEsc(evt) {
