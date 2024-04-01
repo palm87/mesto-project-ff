@@ -2,8 +2,7 @@ import './pages/index.css';
 import {
   createCard,
   cardToDelete,
-  elementToDelete, 
-  likeCardHandler
+  elementToDelete
 } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 import {
