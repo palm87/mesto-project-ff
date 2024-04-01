@@ -1,3 +1,5 @@
+import {changeData, handleError} from './api.js';
+
 //получим template для создания карточки
 const cardTemplate = document.querySelector('#card-template').content;
 
@@ -10,11 +12,11 @@ export let elementToDelete;
 export function createCard(
   cardData,
   currentProfileId,
-  likeCardCallback,
+  // likeCardCallback,
   showBigImageCallback, 
   openPopupCallback,
-  checkCardsOwnerCallback,
-  didILikeItCallback,
+  // checkCardsOwnerCallback,
+  // didILikeItCallback,
   popupDeleteCardParam
 ) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); //клонируем содержимое template
@@ -33,7 +35,7 @@ export function createCard(
 
   //проверим, кто владелец карточки, если текущий пользователь - повесим слушатель,
   // в противном случае - уберем кнопку удаления
-  if (!checkCardsOwnerCallback(cardData, currentProfileId)) {
+  if (!checkCardsOwner(cardData, currentProfileId)) {
     deleteCardButton.remove();
   }
 
@@ -44,12 +46,12 @@ export function createCard(
   });
 
   //если мы уже лайкали карточку - рисуем сердечко
-  if (didILikeItCallback(cardData, currentProfileId)) {
+  if (didILikeIt(cardData, currentProfileId)) {
     cardLikeButton.classList.add('card__like-button_is-active');
   }
   //слушатель лайка
   cardLikeButton.addEventListener('click', () => {
-    likeCardCallback(
+    likeCardHandler(
       cardData,
       cardLikeButton,
       currentProfileId,
@@ -60,4 +62,42 @@ export function createCard(
   //слушатель открытия попапа с большой картинкой по клику на картинку
   cardImage.addEventListener('click', showBigImageCallback);
   return cardElement;
+}
+
+export function likeCardHandler(
+  cardData,
+  cardLikeButton,
+  currentProfileId,
+  cardLikesCount
+) {
+  const cardId = cardData._id;
+  if (didILikeIt(cardData, currentProfileId)) {
+    changeLikesCount(cardId, 'DELETE', cardLikesCount, cardData);
+  } else {
+    changeLikesCount(cardId, 'PUT', cardLikesCount, cardData);
+  }
+  cardLikeButton.classList.toggle('card__like-button_is-active');
+}
+
+// функция для проверки, является ли текущий пользователь владельцем карточки
+function checkCardsOwner(card, currentProfileId) {
+  return currentProfileId === card.owner._id;
+}
+
+// функция для проверки, ставился ли мной лайк для данной карточки
+function didILikeIt(card, currentProfileId) {
+  const idsLiked = card.likes.map((user) => user._id);
+  return idsLiked.some(function (id) {
+    return id == currentProfileId;
+  });
+}
+
+// функция для отрисовки количества лайков
+function changeLikesCount(cardId, method, cardLikesCount, cardData) {
+  changeData(`/cards/likes/${cardId}`, {}, method)
+    .then((result) => {
+      cardLikesCount.textContent = result.likes.length;
+      cardData.likes = result.likes;
+    })
+    .catch(handleError);
 }

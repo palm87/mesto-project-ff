@@ -2,7 +2,8 @@ import './pages/index.css';
 import {
   createCard,
   cardToDelete,
-  elementToDelete
+  elementToDelete, 
+  likeCardHandler
 } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 import {
@@ -82,7 +83,7 @@ profileAvatar.addEventListener('click', function () {
 //слушатель отправки формы редактирования аватара
 avatarEditForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
-  renderLoading(true)
+  renderLoading(true, evt.target)
   const newUrl = newAvatarInputUrl.value;
   const body = { avatar: newUrl };
   changeData(uriBook.currentAvatar, body, 'PATCH')
@@ -90,9 +91,12 @@ avatarEditForm.addEventListener('submit', function (evt) {
       profileAvatar.style = `background-image: url('${profileData.avatar}')`;
     })
     .then(() =>  {
-        renderLoading(false)
+        renderLoading(false, evt.target)
         closePopup()})
     .catch(handleError)
+    .finally(res =>   
+    renderLoading(false, evt.target)
+    )
 });
 
 
@@ -100,7 +104,7 @@ avatarEditForm.addEventListener('submit', function (evt) {
 // ф-ия сохранения отредактированного профиля
 function editProfileFormSubmit(evt) {
   evt.preventDefault();
-  renderLoading(true);
+  renderLoading(true, evt.target);
   const body = {
     name: profileNameInput.value,
     about: profileDescriptionInput.value,
@@ -111,9 +115,10 @@ function editProfileFormSubmit(evt) {
       profileDescription.textContent = result.about;
     })
     .then(() =>  {
-        renderLoading(false)
+        renderLoading(false, evt.target)
         closePopup()})
     .catch(handleError)
+    .finally(res => renderLoading(false, evt.target))
 
 }
 
@@ -130,24 +135,26 @@ addNewCardButton.addEventListener('click', function () {
 
 // обработчик формы сохранения новой карточки
 function addNewCardFormSubmit(evt) {
+  // console.log(evt.target.querySelector('.popup__button'))
   evt.preventDefault();
-  renderLoading(true);
+  renderLoading(true, evt.target);
   const newCard = {};
   newCard.name = newCardInputName.value;
   newCard.link = newCardInputUrl.value;
 
   changeData(uriBook.allCards, newCard, 'POST')
     .then((cardData) => {
-      renderLoading(true);
+      renderLoading(true, evt.target);
       renderCard(
-        createCard(cardData, cardData.owner._id, likeCardHandler, showBigImage, openPopup, checkCardsOwner,didILikeIt, popupDeleteCard)
+        createCard(cardData, cardData.owner._id, showBigImage, openPopup, popupDeleteCard)
       );
       evt.target.reset();
     })
     .then(() =>  {
-        renderLoading(false)
+        renderLoading(false, evt.target)
         closePopup()})
     .catch(handleError)
+    .finally(res => renderLoading(false, evt.target))
 }
 
 // слушатель отправки формы сохранения новой карточки
@@ -163,19 +170,17 @@ function renderCard(card, position = 'before') {
   } else cardsList.prepend(card);
 }
 
+
 // отрисовка "Сохранение..." на кнопке в процессе отправки данных
-function renderLoading(isLoading) {
-  //найдем открытый попап
-  const opennedPopup = document.querySelector('.popup_is-opened');
-  //найдем в этом попапе кнопку сохранения
-  const submitButton = opennedPopup.querySelector('.popup__button');
+function renderLoading(isLoading, submitTarget) {
+
+  const submitButton = submitTarget.querySelector('.popup__button');
   if (isLoading) {
     submitButton.textContent = 'Сохранение...';
   } else {
     submitButton.textContent = 'Сохранить';
   }
 }
-
 
 
 // загрузим с сервера имеющиеся карточки, для этого сделаем 2 запроса: массив имеющихся карточек
@@ -186,7 +191,7 @@ Promise.all([getData(uriBook.allCards), getData(uriBook.currentProfile)])
     const dataProfile = data[1];
     dataCards.forEach((card) => {
       renderCard(
-        createCard(card, dataProfile._id, likeCardHandler, showBigImage, openPopup, checkCardsOwner, didILikeIt, popupDeleteCard),
+        createCard(card, dataProfile._id, showBigImage, openPopup, popupDeleteCard),
         'after'
       );
     });
@@ -209,15 +214,11 @@ allPopups.forEach((popup) => {
   });
 });
 
-
 //отправка формы подтверждения удаления карточки
 deleteConfirmationForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     deleteCard(cardToDelete)
     })
-
-
-const cardTemplate = document.querySelector('#card-template').content;
 
 function deleteCard(cardData) {
     changeData(`/cards/${cardData._id}`, {}, 'DELETE')
@@ -227,44 +228,6 @@ function deleteCard(cardData) {
     })
     .catch(handleError)
   }
-
-function likeCardHandler(
-  cardData,
-  cardLikeButton,
-  currentProfileId,
-  cardLikesCount
-) {
-  const cardId = cardData._id;
-  if (didILikeIt(cardData, currentProfileId)) {
-    changeLikesCount(cardId, 'DELETE', cardLikesCount, cardData);
-  } else {
-    changeLikesCount(cardId, 'PUT', cardLikesCount, cardData);
-  }
-  cardLikeButton.classList.toggle('card__like-button_is-active');
-}
-
-// функция для проверки, является ли текущий пользователь владельцем карточки
-function checkCardsOwner(card, currentProfileId) {
-  return currentProfileId === card.owner._id;
-}
-
-// функция для проверки, ставился ли мной лайк для данной карточки
-function didILikeIt(card, currentProfileId) {
-  const idsLiked = card.likes.map((user) => user._id);
-  return idsLiked.some(function (id) {
-    return id == currentProfileId;
-  });
-}
-
-// функция для отрисовки количества лайков
-function changeLikesCount(cardId, method, cardLikesCount, cardData) {
-  changeData(`/cards/likes/${cardId}`, {}, method)
-    .then((result) => {
-      cardLikesCount.textContent = result.likes.length;
-      cardData.likes = result.likes;
-    })
-    .catch(handleError);
-}
 
 // включение валидации полей
 enableValidation(validationConfig);
